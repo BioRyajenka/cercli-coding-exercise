@@ -44,8 +44,10 @@ dependencies {
     implementation("commons-validator:commons-validator:1.9.0")
     implementation("com.zaxxer:HikariCP:5.1.0")
 
-
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlin_version")
+    testImplementation("io.ktor:ktor-server-tests:$ktor_version")
+    testImplementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
 }
 
 

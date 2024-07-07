@@ -7,5 +7,5 @@ data class CreateEmployeeRequest(
     val name: String,
     val position: String,
     val email: String,
-    val salary: Float,
+    val salary: Double,
 )

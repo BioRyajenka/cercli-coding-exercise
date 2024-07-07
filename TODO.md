@@ -4,5 +4,6 @@
 - [ ] Add basic CRUD operations. Validate roles and all the necessary fields.
 - [ ] Consider "timezone requirement".
 - [ ] (Optional) Add console logs
+- [ ] Add health endpoint
 - [ ] (Optional) Add opentracing integration
 - [ ] Add "public holidays" service.
