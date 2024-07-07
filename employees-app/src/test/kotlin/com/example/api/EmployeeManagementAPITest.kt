@@ -2,10 +2,12 @@ package com.example.api
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.example.model.Employee
 import com.example.model.anEmployee
 import com.example.setupAuth
 import com.example.setupExceptionHandlers
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
@@ -50,8 +52,8 @@ class EmployeeManagementAPITest {
 
         // when
         val response = client.post("/employees") {
-            header(HttpHeaders.ContentType, ContentType.Application.Json)
             header(HttpHeaders.Authorization, "Bearer $token")
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
             setBody(anEmployee())
         }
 
@@ -67,8 +69,8 @@ class EmployeeManagementAPITest {
 
         // when
         val response = client.post("/employees") {
-            header(HttpHeaders.ContentType, ContentType.Application.Json)
             header(HttpHeaders.Authorization, "Bearer $token")
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
             setBody(anEmployee())
         }
 
@@ -81,13 +83,15 @@ class EmployeeManagementAPITest {
     fun `PATCH employees responds with Unauthorized if role is not EMPLOYEE_ADMIN`() = testApplication {
         // given
         val (client, token) = setupEnvironmentAndGetClient(Role.MANAGER, Role.EMPLOYEE)
-        val updateRequest = anEmployee()
+        val id = UUID.randomUUID()
 
         // when
-        val response = client.patch("/employees/${updateRequest.id}") {
-            header(HttpHeaders.ContentType, ContentType.Application.Json)
+        val response = client.patch("/employees/$id") {
             header(HttpHeaders.Authorization, "Bearer $token")
-            setBody(updateRequest)
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            setBody("""
+                {"name": "newname"}
+            """.trimIndent())
         }
 
         // then
@@ -102,8 +106,8 @@ class EmployeeManagementAPITest {
 
         // when
         val response = client.patch("/employees/$id") {
-            header(HttpHeaders.ContentType, ContentType.Application.Json)
             header(HttpHeaders.Authorization, "Bearer $token")
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
             setBody("""
                 {"name": "newname"}
             """.trimIndent())
@@ -112,6 +116,40 @@ class EmployeeManagementAPITest {
         // then
         assertEquals(HttpStatusCode.NoContent, response.status)
         verify(employeeRepository).update(eq(id), any())
+    }
+
+    @Test
+    fun `GET employees responds with Unauthorized if role is not MANAGER`() = testApplication {
+        // given
+        val (client, token) = setupEnvironmentAndGetClient(Role.EMPLOYEE)
+        val id = UUID.randomUUID()
+
+        // when
+        val response = client.get("/employees/$id") {
+            header(HttpHeaders.Authorization, "Bearer $token")
+        }
+
+        // then
+        assertEquals(HttpStatusCode.Unauthorized, response.status)
+    }
+
+    @Test
+    fun `GET employees returns employee when input is valid`() = testApplication {
+        // given
+        val (client, token) = setupEnvironmentAndGetClient(Role.MANAGER)
+        val id = UUID.randomUUID()
+        val expected = anEmployee()
+        given(employeeRepository.get(id)).willReturn(expected)
+
+        // when
+        val response = client.get("/employees/$id") {
+            header(HttpHeaders.Authorization, "Bearer $token")
+        }
+
+        // then
+        assertEquals(HttpStatusCode.OK, response.status)
+        val actual = response.body<Employee>()
+        assertEquals(expected, actual)
     }
 
     private fun ApplicationTestBuilder.setupEnvironmentAndGetClient(vararg roles: Role): Pair<HttpClient, String> {

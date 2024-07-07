@@ -55,6 +55,12 @@ fun Application.setupRoutes(employeeRepository: EmployeeRepository, clock: Clock
                 }
                 call.respond(HttpStatusCode.NoContent)
             }
+            get("/employees/{id}") {
+                validateRole(Role.MANAGER)
+
+                val id = UUID.fromString(call.parameters["id"]!!)
+                call.respond(employeeRepository.get(id))
+            }
         }
     }
 }

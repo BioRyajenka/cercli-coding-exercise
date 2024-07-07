@@ -6,6 +6,7 @@ import com.example.model.Employee
 import com.example.model.Money
 import org.ktorm.database.Database
 import org.ktorm.database.TransactionIsolation
+import org.ktorm.database.iterator
 import org.ktorm.dsl.*
 import org.ktorm.entity.filter
 import org.ktorm.entity.sequenceOf
@@ -54,6 +55,14 @@ class EmployeeRepository(dbConnectionPool: DataSource) {
                 where { it.id eq id }
             }
         }
+    }
+
+    fun get(id: UUID): Employee {
+        val row = database.from(Employees)
+            .select()
+            .where(Employees.id eq id)
+            .iterator().next()
+        return rowToEmployee(row)
     }
 
     private fun rowToEmployee(row: QueryRowSet) = Employee(

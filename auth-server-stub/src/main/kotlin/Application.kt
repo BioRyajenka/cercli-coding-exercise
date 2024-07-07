@@ -30,16 +30,16 @@ fun Application.main() {
         post("/login") {
             val user = call.receive<User>()
             // note: it's a stub implementation
-            val role = when (user.username) {
-                "admin" -> Role.EMPLOYEE_ADMIN
-                "manager" -> Role.MANAGER
-                else -> Role.EMPLOYEE
+            val roles = when (user.username) {
+                "admin" -> arrayOf(Role.EMPLOYEE_ADMIN, Role.MANAGER)
+                "manager" -> arrayOf(Role.MANAGER)
+                else -> arrayOf(Role.EMPLOYEE)
             }
             val token = JWT.create()
                 .withIssuer(issuer)
                 .withClaim(JWTClaim.USERNAME, user.username)
-                .withRoles(role)
-                .withExpiresAt(Date(System.currentTimeMillis() + 600000))
+                .withRoles(*roles)
+                .withExpiresAt(Date(System.currentTimeMillis() + 6000000))
                 .sign(Algorithm.HMAC256(secret))
             call.respond(hashMapOf("token" to token))
         }

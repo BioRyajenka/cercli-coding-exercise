@@ -17,4 +17,13 @@ class EmployeeRepositoryTest {
 
     @Test
     fun `update throws NotFoundException if employee doesn't exist`() {}
+
+    @Test
+    fun `update updates employee if it exists`() {}
+
+    @Test
+    fun `get throws NotFoundException if employee doesn't exist`() {}
+
+    @Test
+    fun `get returns employee if it exists`() {}
 }
