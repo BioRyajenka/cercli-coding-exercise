@@ -152,6 +152,38 @@ class EmployeeManagementAPITest {
         assertEquals(expected, actual)
     }
 
+    @Test
+    fun `GET all employees responds with Unauthorized if role is not MANAGER`() = testApplication {
+        // given
+        val (client, token) = setupEnvironmentAndGetClient(Role.EMPLOYEE)
+
+        // when
+        val response = client.get("/employees") {
+            header(HttpHeaders.Authorization, "Bearer $token")
+        }
+
+        // then
+        assertEquals(HttpStatusCode.Unauthorized, response.status)
+    }
+
+    @Test
+    fun `GET all employees returns all employees when input is valid`() = testApplication {
+        // given
+        val (client, token) = setupEnvironmentAndGetClient(Role.MANAGER)
+        val expectedList = listOf(anEmployee(), anEmployee())
+        given(employeeRepository.getAll()).willReturn(expectedList)
+
+        // when
+        val response = client.get("/employees") {
+            header(HttpHeaders.Authorization, "Bearer $token")
+        }
+
+        // then
+        assertEquals(HttpStatusCode.OK, response.status)
+        val actualList = response.body<List<Employee>>()
+        assertEquals(expectedList, actualList)
+    }
+
     private fun ApplicationTestBuilder.setupEnvironmentAndGetClient(vararg roles: Role): Pair<HttpClient, String> {
         val jwtSecret = "secret"
         val jwtIssuer = "issuer"

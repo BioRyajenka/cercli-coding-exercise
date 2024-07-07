@@ -40,5 +40,8 @@ fun Application.setupExceptionHandlers() {
         exception<NotImplementedError> { call, cause ->
             call.respond(HttpStatusCode.NotImplemented, cause.localizedMessage)
         }
+        exception<NoSuchElementException> { call, cause ->
+            call.respond(HttpStatusCode.NotFound, cause.localizedMessage)
+        }
     }
 }

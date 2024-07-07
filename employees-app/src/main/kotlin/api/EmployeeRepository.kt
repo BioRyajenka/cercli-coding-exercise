@@ -65,6 +65,12 @@ class EmployeeRepository(dbConnectionPool: DataSource) {
         return rowToEmployee(row)
     }
 
+    fun getAll(): List<Employee> {
+        return database.from(Employees)
+            .select()
+            .map(::rowToEmployee)
+    }
+
     private fun rowToEmployee(row: QueryRowSet) = Employee(
         id = row[Employees.id]!!,
         name = row[Employees.name]!!,

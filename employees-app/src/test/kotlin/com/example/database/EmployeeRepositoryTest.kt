@@ -26,4 +26,7 @@ class EmployeeRepositoryTest {
 
     @Test
     fun `get returns employee if it exists`() {}
+
+    @Test
+    fun `getAll returns all employees`() {}
 }
