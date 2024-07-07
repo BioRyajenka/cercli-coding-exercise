@@ -11,6 +11,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.*
 import org.example.auth.JWTClaim
+import org.example.auth.Role
 import java.util.*
 
 @Serializable
@@ -28,14 +29,23 @@ fun Application.main() {
     routing {
         post("/login") {
             val user = call.receive<User>()
-            // Check username and password
-            // ...
+            // note: it's a stub implementation
+            val role = when (user.username) {
+                "admin" -> Role.EMPLOYEE_ADMIN
+                "manager" -> Role.MANAGER
+                else -> Role.EMPLOYEE
+            }
             val token = JWT.create()
                 .withIssuer(issuer)
                 .withClaim(JWTClaim.USERNAME, user.username)
+                .withRoles(role)
                 .withExpiresAt(Date(System.currentTimeMillis() + 600000))
                 .sign(Algorithm.HMAC256(secret))
             call.respond(hashMapOf("token" to token))
         }
     }
+}
+
+private fun JWTCreator.Builder.withRoles(vararg roles: Role): JWTCreator.Builder {
+    return withArrayClaim(JWTClaim.ROLES, roles.map(Role::name).toTypedArray())
 }

@@ -6,10 +6,16 @@ plugins {
     application
     kotlin("jvm")
     kotlin("plugin.serialization")
+    id("io.ktor.plugin")
 }
 
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
+}
+ktor {
+    fatJar {
+        archiveFileName.set("fat.jar")
+    }
 }
 
 group = "org.example.auth"
