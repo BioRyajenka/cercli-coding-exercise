@@ -1,4 +1,4 @@
-package com.example.api
+package com.example.database
 
 import com.example.database.Employees
 import com.example.database.forUpdate

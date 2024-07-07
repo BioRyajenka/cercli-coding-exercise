@@ -1,7 +1,7 @@
 package com.example
 
-import com.example.api.EmployeeRepository
-import com.example.api.setupRoutes
+import com.example.database.EmployeeRepository
+import com.example.api.setupManagementAPI
 import com.example.database.createDBConnectionPool
 import com.example.database.setupDBMigrations
 import io.ktor.http.*
@@ -27,7 +27,7 @@ fun Application.main() {
     val employeeRepository = EmployeeRepository(dbConnectionPool)
     setupAuth()
     setupObservability()
-    setupRoutes(employeeRepository, clock = Clock.systemDefaultZone())
+    setupManagementAPI(employeeRepository, clock = Clock.systemDefaultZone())
 }
 
 fun Application.setupObservability() {

@@ -5,5 +5,4 @@
 - [ ] Consider "timezone requirement".
 - [x] Add console logs (note: all requests are already logged automatically by ktor)
 - [x] Add health endpoint
-- [ ] (Optional) Add opentracing integration
 - [ ] Add "public holidays" service.

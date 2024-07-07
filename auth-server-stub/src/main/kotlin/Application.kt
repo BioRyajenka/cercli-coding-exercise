@@ -39,7 +39,7 @@ fun Application.main() {
                 .withIssuer(issuer)
                 .withClaim(JWTClaim.USERNAME, user.username)
                 .withRoles(*roles)
-                .withExpiresAt(Date(System.currentTimeMillis() + 600000))
+                .withExpiresAt(Date(System.currentTimeMillis() + 6000000))
                 .sign(Algorithm.HMAC256(secret))
             call.respond(hashMapOf("token" to token))
         }

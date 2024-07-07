@@ -1,6 +1,7 @@
 package com.example.api
 
 import com.example.authenticate
+import com.example.database.EmployeeRepository
 import com.example.model.Employee
 import com.example.model.Money
 import com.example.validateRole
@@ -14,7 +15,7 @@ import java.time.Clock
 import java.time.Instant
 import java.util.UUID
 
-fun Application.setupRoutes(employeeRepository: EmployeeRepository, clock: Clock) {
+fun Application.setupManagementAPI(employeeRepository: EmployeeRepository, clock: Clock) {
     routing {
         authenticate {
             post("/employees") {

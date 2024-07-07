@@ -2,6 +2,7 @@ package com.example.api
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.example.database.EmployeeRepository
 import com.example.model.Employee
 import com.example.model.anEmployee
 import com.example.setupAuth
@@ -230,7 +231,7 @@ class EmployeeManagementAPITest {
             }
             setupExceptionHandlers()
             setupAuth()
-            setupRoutes(employeeRepository, clock)
+            setupManagementAPI(employeeRepository, clock)
         }
 
         return createClient {
