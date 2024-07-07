@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+skinparam componentStyle rectangle
+
+[Employees Service]
+[Auth Service]
+database Employees
+[Load Balancer]
+actor User
+[3rd party holidays Service] #lightblue
+component Observability as [Observability Platform\n<i>(NewRelic/Grafana/Datadog etc)</i>]
+
+User --> [Load Balancer]
+[Load Balancer] --> [Auth Service]
+[Load Balancer] --> [Employees Service]
+[Employees Service] --> Employees
+[Employees Service] -l-> [3rd party holidays Service]
+[Employees Service] -[dotted]-> Observability
+
+@enduml

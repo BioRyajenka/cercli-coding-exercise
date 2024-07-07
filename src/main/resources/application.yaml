@@ -1,0 +1,14 @@
+ktor:
+  deployment:
+    port: 8080
+    watch:
+      - classes
+      - resources
+  development: true
+  application:
+    modules:
+      - com.example.ApplicationKt.main
+
+jwt:
+  secret: "secret"
+  issuer: "Auth Server"
