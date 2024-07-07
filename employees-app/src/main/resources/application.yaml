@@ -12,3 +12,8 @@ ktor:
 jwt:
   secret: "secret"
   expected-issuer: "Auth Server"
+
+datasource:
+  url: "jdbc:postgresql://localhost:5432/employees"
+  user: "postgres"
+  password: "postgres"
