@@ -3,7 +3,7 @@
 - [x] Add flyway migrations, add basic docker-compose.
 - [x] Add basic CRUD operations. Validate roles and all the necessary fields.
 - [ ] Consider "timezone requirement".
-- [ ] (Optional) Add console logs
-- [ ] Add health endpoint
+- [x] Add console logs (note: all requests are already logged automatically by ktor)
+- [x] Add health endpoint
 - [ ] (Optional) Add opentracing integration
 - [ ] Add "public holidays" service.

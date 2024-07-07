@@ -11,7 +11,7 @@ import io.ktor.server.netty.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
-import kotlinx.serialization.json.Json
+import io.ktor.server.routing.*
 import java.time.Clock
 
 fun main(args: Array<String>) = EngineMain.main(args)
@@ -26,7 +26,19 @@ fun Application.main() {
     val dbConnectionPool = createDBConnectionPool()
     val employeeRepository = EmployeeRepository(dbConnectionPool)
     setupAuth()
+    setupObservability()
     setupRoutes(employeeRepository, clock = Clock.systemDefaultZone())
+}
+
+fun Application.setupObservability() {
+    // note: what also can be setup is metrics & traces
+    //  for metrics prometheus is a common choice in java;
+    //  for traces the common (and a good) choice is opentelemetry + jaeger
+    routing {
+        get("/health") {
+            call.respond("I am healthy")
+        }
+    }
 }
 
 fun Application.setupExceptionHandlers() {
