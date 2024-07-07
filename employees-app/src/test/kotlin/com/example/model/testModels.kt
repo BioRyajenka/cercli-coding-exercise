@@ -1,5 +1,6 @@
 package com.example.model
 
+import com.neovisionaries.i18n.CountryCode
 import java.time.Instant
 import java.util.*
 
@@ -11,4 +12,5 @@ fun anEmployee(
     salary: Money = Money.fromDouble(400.0),
     createdAt: Instant = Instant.ofEpochSecond(1720380242),
     modifiedAt: Instant = Instant.ofEpochSecond(1720380242),
-) = Employee(id, name, position, email, salary, createdAt, modifiedAt)
+    countryOfEmployment: Country = Country(CountryCode.UNDEFINED),
+) = Employee(id, name, position, email, salary, countryOfEmployment, createdAt, modifiedAt)

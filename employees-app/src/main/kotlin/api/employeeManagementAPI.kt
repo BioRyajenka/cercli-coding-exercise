@@ -31,6 +31,7 @@ fun Application.setupRoutes(employeeRepository: EmployeeRepository, clock: Clock
                         position = createRequest.position,
                         email = createRequest.email,
                         salary = Money.fromDouble(createRequest.salary),
+                        countryOfEmployment = createRequest.countryOfEmployment,
                         createdAt = now,
                         modifiedAt = now,
                     )
@@ -49,6 +50,7 @@ fun Application.setupRoutes(employeeRepository: EmployeeRepository, clock: Clock
                         position = updateRequest.position ?: existing.position,
                         email = updateRequest.email ?: existing.email,
                         salary = updateRequest.salary?.let(Money::fromDouble) ?: existing.salary,
+                        countryOfEmployment = updateRequest.countryOfEmployment ?: existing.countryOfEmployment,
                         createdAt = existing.createdAt,
                         modifiedAt = Instant.now(clock),
                     )

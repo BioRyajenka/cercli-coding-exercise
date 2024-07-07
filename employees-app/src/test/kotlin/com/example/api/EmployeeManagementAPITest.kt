@@ -62,6 +62,30 @@ class EmployeeManagementAPITest {
     }
 
     @Test
+    fun `POST employees responds with Bad Request if country of employment is not valid`() = testApplication {
+        // given
+        val (client, token) = setupEnvironmentAndGetClient(Role.EMPLOYEE_ADMIN)
+
+        // when
+        val response = client.post("/employees") {
+            header(HttpHeaders.Authorization, "Bearer $token")
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            setBody("""
+                {
+                  "name": "John Doe",
+                  "position": "Software Engineer",
+                  "email": "john.doe@example.com",
+                  "salary": 543.3,
+                  "countryOfEmployment": "unknown country"
+                }
+            """.trimIndent())
+        }
+
+        // then
+        assertEquals(HttpStatusCode.BadRequest, response.status)
+    }
+
+    @Test
     fun `POST employees persists employee when input is valid`() = testApplication {
         // given
         val (client, token) = setupEnvironmentAndGetClient(Role.EMPLOYEE_ADMIN)

@@ -44,6 +44,7 @@ dependencies {
     implementation("org.ktorm:ktorm-support-postgresql:4.0.0")
     implementation("commons-validator:commons-validator:1.9.0")
     implementation("com.zaxxer:HikariCP:5.1.0")
+    implementation("com.neovisionaries:nv-i18n:1.28")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlin_version")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")

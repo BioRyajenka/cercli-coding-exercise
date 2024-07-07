@@ -18,6 +18,7 @@ data class Employee(
     val email: String,
     @Serializable(with = MoneySerializer::class)
     val salary: Money,
+    val countryOfEmployment: Country,
     @Serializable(with = InstantSerializer::class)
     override val createdAt: Instant,
     @Serializable(with = InstantSerializer::class)

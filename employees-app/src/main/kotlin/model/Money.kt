@@ -9,6 +9,7 @@ import kotlinx.serialization.encoding.Encoder
 /**
  * Money is represented as "long" to get around potential precision issues
  */
+// TODO (out of scope for this exercise): add currency
 data class Money(val minorAmount: Long) {
     fun toDouble(): Double = minorAmount / 100.0
     companion object {

@@ -2,17 +2,13 @@ package com.example.api
 
 import com.example.database.Employees
 import com.example.database.forUpdate
+import com.example.model.Country
 import com.example.model.Employee
 import com.example.model.Money
+import com.neovisionaries.i18n.CountryCode
 import org.ktorm.database.Database
 import org.ktorm.database.TransactionIsolation
-import org.ktorm.database.iterator
 import org.ktorm.dsl.*
-import org.ktorm.entity.filter
-import org.ktorm.entity.sequenceOf
-import org.ktorm.expression.SelectExpression
-import org.ktorm.expression.SqlExpression
-import org.ktorm.expression.UnionExpression
 import java.util.*
 import javax.sql.DataSource
 
@@ -26,6 +22,7 @@ class EmployeeRepository(dbConnectionPool: DataSource) {
             set(it.position, employee.position)
             set(it.email, employee.email)
             set(it.salary, employee.salary.minorAmount)
+            set(it.countryOfEmployment, employee.countryOfEmployment.code.name)
             set(it.created_at, employee.createdAt)
             set(it.modified_at, employee.modifiedAt)
         }
@@ -51,6 +48,7 @@ class EmployeeRepository(dbConnectionPool: DataSource) {
                 set(it.position, updatedEmployee.position)
                 set(it.email, updatedEmployee.email)
                 set(it.salary, updatedEmployee.salary.minorAmount)
+                set(it.countryOfEmployment, updatedEmployee.countryOfEmployment.code.name)
                 set(it.modified_at, updatedEmployee.modifiedAt)
                 where { it.id eq id }
             }
@@ -77,6 +75,7 @@ class EmployeeRepository(dbConnectionPool: DataSource) {
         position = row[Employees.position]!!,
         email = row[Employees.email]!!,
         salary = Money(row[Employees.salary]!!),
+        countryOfEmployment = Country(CountryCode.getByCode(row[Employees.countryOfEmployment]!!)),
         createdAt = row[Employees.created_at]!!,
         modifiedAt = row[Employees.modified_at]!!,
     )

@@ -11,6 +11,7 @@ object Employees : Table<Nothing>("employees") {
     val position = text("position")
     val email = text("email")
     val salary = long("salary_integerised")
+    val countryOfEmployment = text("country_of_employment")
     val created_at = timestampz("created_at")
     val modified_at = timestampz("modified_at")
 }
