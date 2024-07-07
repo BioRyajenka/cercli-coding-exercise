@@ -11,4 +11,4 @@ ktor:
 
 jwt:
   secret: "secret"
-  issuer: "Auth Server"
+  expected-issuer: "Auth Server"
