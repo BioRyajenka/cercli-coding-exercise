@@ -77,6 +77,43 @@ class EmployeeManagementAPITest {
         verify(employeeRepository).save(argThat { employee -> employee.createdAt == clock.instant() })
     }
 
+    @Test
+    fun `PATCH employees responds with Unauthorized if role is not EMPLOYEE_ADMIN`() = testApplication {
+        // given
+        val (client, token) = setupEnvironmentAndGetClient(Role.MANAGER, Role.EMPLOYEE)
+        val updateRequest = anEmployee()
+
+        // when
+        val response = client.patch("/employees/${updateRequest.id}") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            header(HttpHeaders.Authorization, "Bearer $token")
+            setBody(updateRequest)
+        }
+
+        // then
+        assertEquals(HttpStatusCode.Unauthorized, response.status)
+    }
+
+    @Test
+    fun `PATCH employees updates employee when input is valid`() = testApplication {
+        // given
+        val (client, token) = setupEnvironmentAndGetClient(Role.EMPLOYEE_ADMIN)
+        val id = UUID.randomUUID()
+
+        // when
+        val response = client.patch("/employees/$id") {
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+            header(HttpHeaders.Authorization, "Bearer $token")
+            setBody("""
+                {"name": "newname"}
+            """.trimIndent())
+        }
+
+        // then
+        assertEquals(HttpStatusCode.NoContent, response.status)
+        verify(employeeRepository).update(eq(id), any())
+    }
+
     private fun ApplicationTestBuilder.setupEnvironmentAndGetClient(vararg roles: Role): Pair<HttpClient, String> {
         val jwtSecret = "secret"
         val jwtIssuer = "issuer"

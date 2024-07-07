@@ -4,13 +4,11 @@ import com.example.authenticate
 import com.example.model.Employee
 import com.example.model.Money
 import com.example.validateRole
+import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.example.auth.JWTClaim
 import org.example.auth.Role
 import java.time.Clock
 import java.time.Instant
@@ -38,6 +36,24 @@ fun Application.setupRoutes(employeeRepository: EmployeeRepository, clock: Clock
                     )
                 )
                 call.respond(created)
+            }
+            patch("/employees/{id}") {
+                validateRole(Role.EMPLOYEE_ADMIN)
+
+                val id = UUID.fromString(call.parameters["id"]!!)
+                val updateRequest = call.receive<UpdateEmployeeRequest>()
+
+                employeeRepository.update(id) { existing ->
+                    existing.copy(
+                        name = updateRequest.name ?: existing.name,
+                        position = updateRequest.position ?: existing.position,
+                        email = updateRequest.email ?: existing.email,
+                        salary = updateRequest.salary?.let(Money::fromDouble) ?: existing.salary,
+                        createdAt = existing.createdAt,
+                        modifiedAt = Instant.now(clock),
+                    )
+                }
+                call.respond(HttpStatusCode.NoContent)
             }
         }
     }

@@ -41,6 +41,7 @@ dependencies {
     implementation("org.flywaydb:flyway-core:8.5.13")
     implementation("org.postgresql:postgresql:42.7.3")
     implementation("org.ktorm:ktorm-core:4.0.0")
+    implementation("org.ktorm:ktorm-support-postgresql:4.0.0")
     implementation("commons-validator:commons-validator:1.9.0")
     implementation("com.zaxxer:HikariCP:5.1.0")
 
