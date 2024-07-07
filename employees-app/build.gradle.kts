@@ -5,12 +5,17 @@ val logback_version: String by project
 plugins {
     application
     kotlin("jvm")
+    id("io.ktor.plugin")
 }
 
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
 }
-
+ktor {
+    fatJar {
+        archiveFileName.set("fat.jar")
+    }
+}
 group = "org.example"
 version = "unspecified"
 

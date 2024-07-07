@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  employees-app:
+    build:
+      context: ./
+      dockerfile: ./employees-app/Dockerfile
+    ports:
+      - "8080:8080"
+  auth-server-stub:
+    build:
+      context: ./
+      dockerfile: ./auth-server-stub/Dockerfile
+    ports:
+      - "8081:8081"
+  postgres:
+    image: postgres:13-alpine
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: employees
+#      PGDATA: /var/lib/postgresql/data/db-files/
+    command: [ postgres, -c, wal_level=logical ]
+#    volumes:
+#      - db-data:/var/lib/postgresql/data:rw
