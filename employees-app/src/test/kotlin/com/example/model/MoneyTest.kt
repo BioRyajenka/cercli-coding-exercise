@@ -19,12 +19,12 @@ class MoneyTest {
     @Test
     fun `fromDouble correctly converts double to money`() {
         // given
-        val double = 123.35
+        val double = 123.5
 
         // when
         val actual = Money.fromDouble(double)
 
         // then
-        assertEquals(12335, actual.minorAmount)
+        assertEquals(12350, actual.minorAmount)
     }
 }

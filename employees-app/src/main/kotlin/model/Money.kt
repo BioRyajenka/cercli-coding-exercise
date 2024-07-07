@@ -9,15 +9,16 @@ import kotlinx.serialization.encoding.Encoder
 /**
  * Money is represented as "long" to get around potential precision issues
  */
-class Money(val minorAmount: Long) {
+data class Money(val minorAmount: Long) {
     fun toDouble(): Double = minorAmount / 100.0
     companion object {
         fun fromDouble(double: Double): Money {
-            val (integer, fractional) = double.toString().split(".").map(String::toInt)
-            require(fractional < 100) {
-                "Cannot convert $double to money"
+            val stringRepresentation = double.toString()
+            val (integerPart, fractionalPart) = stringRepresentation.split(".")
+            require(fractionalPart.length <= 2) {
+                "Cannot convert $double to money: too many fractional digits"
             }
-            return Money(integer * 100L + fractional)
+            return Money(integerPart.toLong() * 100 + fractionalPart.padEnd(2, '0').toInt())
         }
     }
 }
