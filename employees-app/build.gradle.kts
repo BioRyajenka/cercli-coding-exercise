@@ -45,6 +45,7 @@ dependencies {
     implementation("commons-validator:commons-validator:1.9.0")
     implementation("com.zaxxer:HikariCP:5.1.0")
     implementation("com.neovisionaries:nv-i18n:1.28")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlin_version")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
