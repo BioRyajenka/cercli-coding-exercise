@@ -1,9 +1,8 @@
-package integration.holidays
+package com.example.integration.holidays
 
-import com.example.integration.holidays.CountryNotSupportedException
-import com.example.integration.holidays.HolidaysService
-import com.example.integration.holidays.OpenHolidaysAPI
 import com.example.model.Country
+import com.example.model.UAE
+import com.example.model.UK
 import com.example.model.aHoliday
 import com.neovisionaries.i18n.CountryCode
 import org.junit.jupiter.api.Test
@@ -18,8 +17,6 @@ class HolidaysServiceTest {
     private val openHolidaysAPI = mock<OpenHolidaysAPI>()
     private val clock = mock<Clock>()
     private val holidaysService = HolidaysService(openHolidaysAPI, clock)
-    private val UK = Country(CountryCode.UK)
-    private val UAE = Country(CountryCode.AE)
 
     @Test
     fun `getUpcomingHolidays caches supported countries and holidays for 1 day`() {

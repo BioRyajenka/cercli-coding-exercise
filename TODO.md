@@ -5,4 +5,4 @@
 - [ ] Consider "timezone requirement".
 - [x] Add console logs (note: all requests are already logged automatically by ktor)
 - [x] Add health endpoint
-- [ ] Add "public holidays" service.
+- [x] Add "public holidays" service.

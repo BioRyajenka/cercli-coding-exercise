@@ -15,7 +15,7 @@ data class Employee(
     val id: UUID,
     val name: String,
     val position: String,
-    val email: String,
+    val email: Email,
     @Serializable(with = MoneySerializer::class)
     val salary: Money,
     val countryOfEmployment: Country,
@@ -27,8 +27,5 @@ data class Employee(
     init {
         require(name.isNotBlank()) { "Name should not be blank or empty" }
         require(position.isNotBlank()) { "Position should not be blank or empty" }
-        require(EmailValidator.getInstance().isValid(email)) {
-            "Email should be valid"
-        }
     }
 }

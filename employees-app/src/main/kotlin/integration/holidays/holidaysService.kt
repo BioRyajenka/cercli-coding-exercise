@@ -39,4 +39,4 @@ class HolidaysService(private val openHolidaysAPI: OpenHolidaysAPI, private val 
     }
 }
 
-class CountryNotSupportedException(val country: Country): Exception()
+class CountryNotSupportedException(val country: Country): RuntimeException()

@@ -3,6 +3,7 @@ package com.example.database
 import com.example.database.Employees
 import com.example.database.forUpdate
 import com.example.model.Country
+import com.example.model.Email
 import com.example.model.Employee
 import com.example.model.Money
 import com.neovisionaries.i18n.CountryCode
@@ -20,7 +21,7 @@ class EmployeeRepository(dbConnectionPool: DataSource) {
             set(it.id, employee.id)
             set(it.name, employee.name)
             set(it.position, employee.position)
-            set(it.email, employee.email)
+            set(it.email, employee.email.email)
             set(it.salary, employee.salary.minorAmount)
             set(it.countryOfEmployment, employee.countryOfEmployment.code.name)
             set(it.created_at, employee.createdAt)
@@ -46,7 +47,7 @@ class EmployeeRepository(dbConnectionPool: DataSource) {
             database.update(Employees) {
                 set(it.name, updatedEmployee.name)
                 set(it.position, updatedEmployee.position)
-                set(it.email, updatedEmployee.email)
+                set(it.email, updatedEmployee.email.email)
                 set(it.salary, updatedEmployee.salary.minorAmount)
                 set(it.countryOfEmployment, updatedEmployee.countryOfEmployment.code.name)
                 set(it.modified_at, updatedEmployee.modifiedAt)
@@ -73,7 +74,7 @@ class EmployeeRepository(dbConnectionPool: DataSource) {
         id = row[Employees.id]!!,
         name = row[Employees.name]!!,
         position = row[Employees.position]!!,
-        email = row[Employees.email]!!,
+        email = Email(row[Employees.email]!!),
         salary = Money(row[Employees.salary]!!),
         countryOfEmployment = Country(CountryCode.getByCode(row[Employees.countryOfEmployment]!!)),
         createdAt = row[Employees.created_at]!!,

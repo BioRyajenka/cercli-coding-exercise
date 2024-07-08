@@ -9,7 +9,7 @@ fun anEmployee(
     id: UUID = UUID.randomUUID(),
     name: String = "John Doe",
     position: String = "Developer",
-    email: String = "john.doe@example.com",
+    email: Email = Email("john.doe@example.com"),
     salary: Money = Money.fromDouble(400.0),
     createdAt: Instant = Instant.ofEpochSecond(1720380242),
     modifiedAt: Instant = Instant.ofEpochSecond(1720380242),
@@ -21,3 +21,6 @@ fun aHoliday(
     startDate: Date = SimpleDateFormat("yyyy-MM-dd").parse("2023-01-01"),
     endDate: Date = SimpleDateFormat("yyyy-MM-dd").parse("2023-01-01"),
 ) = Holiday(englishDescription, startDate, endDate)
+
+val UK = Country(CountryCode.UK)
+val UAE = Country(CountryCode.AE)

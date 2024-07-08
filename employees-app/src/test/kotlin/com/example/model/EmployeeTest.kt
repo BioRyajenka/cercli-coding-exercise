@@ -17,11 +17,4 @@ class EmployeeTest {
             anEmployee(position = "   ")
         }
     }
-
-    @Test
-    fun `constructor throws IllegalArgumentException when email is invalid`() {
-        assertThrows<IllegalArgumentException> {
-            anEmployee(email = "invalid@email")
-        }
-    }
 }

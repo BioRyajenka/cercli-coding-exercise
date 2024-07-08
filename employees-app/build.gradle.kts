@@ -35,8 +35,10 @@ dependencies {
     implementation("io.ktor:ktor-server-auth-jwt:$ktor_version")
     implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
     implementation("io.ktor:ktor-server-status-pages:$ktor_version")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
     implementation("io.ktor:ktor-server-config-yaml:$ktor_version")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+    implementation("io.ktor:ktor-client-cio-jvm:$ktor_version")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("org.flywaydb:flyway-core:8.5.13")
     implementation("org.postgresql:postgresql:42.7.3")
@@ -49,13 +51,14 @@ dependencies {
 
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlin_version")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
-    testImplementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
 }
 
-
 tasks.test {
     useJUnitPlatform()
+}
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class).all {
+    compilerOptions.freeCompilerArgs = listOf("-Xcontext-receivers")
 }
 kotlin {
     jvmToolchain(11)

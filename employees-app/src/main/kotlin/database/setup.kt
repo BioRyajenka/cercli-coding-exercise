@@ -1,5 +1,6 @@
 package com.example.database
 
+import com.example.ApplicationComponents
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.server.application.*
@@ -18,10 +19,11 @@ fun Application.setupDBMigrations() {
     Flyway.configure().dataSource(url, user, password).load().migrate()
 }
 
-fun Application.createDBConnectionPool(): DataSource {
-    val url = environment.config.property("datasource.url").getString()
-    val user = environment.config.property("datasource.user").getString()
-    val password = environment.config.property("datasource.password").getString()
+context(ApplicationComponents)
+fun createDBConnectionPool(): DataSource {
+    val url = config.property("datasource.url").getString()
+    val user = config.property("datasource.user").getString()
+    val password = config.property("datasource.password").getString()
 
     val config = HikariConfig()
     config.jdbcUrl = url
