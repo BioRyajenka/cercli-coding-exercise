@@ -13,6 +13,7 @@ import io.ktor.server.routing.*
 import org.example.auth.Role
 import java.time.Clock
 import java.time.Instant
+import java.time.ZoneId
 import java.util.UUID
 
 fun Application.setupManagementAPI(employeeRepository: EmployeeRepository, clock: Clock) {
@@ -25,19 +26,9 @@ fun Application.setupManagementAPI(employeeRepository: EmployeeRepository, clock
                 val now = Instant.now(clock)
                 // note: existing solution can be used to map between models
                 //  but for simplicity, I did it manually throughout this exercise
-                val created = employeeRepository.save(
-                    Employee(
-                        id = UUID.randomUUID(),
-                        name = createRequest.name,
-                        position = createRequest.position,
-                        email = createRequest.email,
-                        salary = Money.fromDouble(createRequest.salary),
-                        countryOfEmployment = createRequest.countryOfEmployment,
-                        createdAt = now,
-                        modifiedAt = now,
-                    )
-                )
-                call.respond(created)
+                val created = employeeRepository.save(convert(createRequest, now))
+                val response: EmployeeResponse = convert(created)
+                call.respond(response)
             }
             patch("/employees/{id}") {
                 validateRole(Role.EMPLOYEE_ADMIN)
@@ -62,13 +53,35 @@ fun Application.setupManagementAPI(employeeRepository: EmployeeRepository, clock
                 validateRole(Role.MANAGER)
 
                 val id = UUID.fromString(call.parameters["id"]!!)
-                call.respond(employeeRepository.get(id))
+                call.respond(convert(employeeRepository.get(id)))
             }
             get("/employees") {
                 validateRole(Role.MANAGER)
 
-                call.respond(employeeRepository.getAll())
+                call.respond(employeeRepository.getAll().map(::convert))
             }
         }
     }
 }
+
+private fun convert(createRequest: CreateEmployeeRequest, now: Instant) = Employee(
+    id = UUID.randomUUID(),
+    name = createRequest.name,
+    position = createRequest.position,
+    email = createRequest.email,
+    salary = Money.fromDouble(createRequest.salary),
+    countryOfEmployment = createRequest.countryOfEmployment,
+    createdAt = now,
+    modifiedAt = now,
+)
+
+private fun convert(employee: Employee) = EmployeeResponse(
+    id = employee.id,
+    name = employee.name,
+    position = employee.position,
+    email = employee.email,
+    salary = employee.salary.toDouble(),
+    countryOfEmployment = employee.countryOfEmployment,
+    createdAtLocal = employee.createdAt.atZone(ZoneId.systemDefault()).toLocalDateTime(),
+    modifiedAtLocal = employee.modifiedAt.atZone(ZoneId.systemDefault()).toLocalDateTime(),
+)

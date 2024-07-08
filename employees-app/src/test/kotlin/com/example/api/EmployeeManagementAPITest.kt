@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test
 import org.mockito.kotlin.*
 import java.time.Clock
 import java.time.Instant
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 import kotlin.test.assertEquals
@@ -90,7 +91,9 @@ class EmployeeManagementAPITest {
     fun `POST employees persists employee when input is valid`() = testApplication {
         // given
         val (client, token) = setupEnvironmentAndGetClient(Role.EMPLOYEE_ADMIN)
-        given(employeeRepository.save(any())).willReturn(anEmployee())
+        given(employeeRepository.save(any())).willReturn(
+            anEmployee(createdAt = Instant.now(clock), modifiedAt = Instant.now(clock))
+        )
 
         // when
         val response = client.post("/employees") {
@@ -101,6 +104,9 @@ class EmployeeManagementAPITest {
 
         // then
         assertEquals(HttpStatusCode.OK, response.status)
+        val employeeResponse = response.body<EmployeeResponse>()
+        assertEquals(LocalDateTime.now(clock), employeeResponse.createdAtLocal)
+        assertEquals(LocalDateTime.now(clock), employeeResponse.modifiedAtLocal)
         verify(employeeRepository).save(argThat { employee -> employee.createdAt == clock.instant() })
     }
 
@@ -173,8 +179,13 @@ class EmployeeManagementAPITest {
 
         // then
         assertEquals(HttpStatusCode.OK, response.status)
-        val actual = response.body<Employee>()
-        assertEquals(expected, actual)
+        val actual = response.body<EmployeeResponse>()
+        assertEquals(expected.id, actual.id)
+        assertEquals(expected.name, actual.name)
+        assertEquals(expected.position, actual.position)
+        assertEquals(expected.email, actual.email)
+        assertEquals(expected.salary.toDouble(), actual.salary)
+        assertEquals(expected.countryOfEmployment, actual.countryOfEmployment)
     }
 
     @Test
@@ -205,8 +216,8 @@ class EmployeeManagementAPITest {
 
         // then
         assertEquals(HttpStatusCode.OK, response.status)
-        val actualList = response.body<List<Employee>>()
-        assertEquals(expectedList, actualList)
+        val actualList = response.body<List<EmployeeResponse>>()
+        assertEquals(expectedList.map { it.id }, actualList.map { it.id })
     }
 
     private fun ApplicationTestBuilder.setupEnvironmentAndGetClient(vararg roles: Role): Pair<HttpClient, String> {
